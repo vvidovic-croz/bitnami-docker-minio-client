@@ -99,34 +99,31 @@ $ docker run -d --name minio-server \
 Finally we create a new container instance to launch the MinIO(R) client and connect to the server created in the previous step. In this example, we create a new bucket in the MinIO(R) storage server:
 
 ```console
-$ docker run --rm --name minio-client \
-    --env MINIO_SERVER_HOST="minio" \
-    --env MINIO_SERVER_ACCESS_KEY="minio-access-key" \
-    --env MINIO_SERVER_SECRET_KEY="minio-secret-key" \
+$ docker run --rm -it --name minio-client \
+    --env MC_HOST_myminio="http://minio-access-key:minio-secret-key@minio-server:9000" \
     --network app-tier \
     bitnami/minio-client \
-    mb minio/my-bucket
+    mb myminio/my-bucket
 ```
 
 ## Configuration
 
-MinIO(R) Client (`mc`) can be setup so it is already configured to point to a specific MinIO(R) server by providing the environment variables below:
+MinIO(R) Client (`mc`) can be setup so it is already configured to point to a specific MinIO(R) server by providing the environment variable below:
 
-- `MINIO_SERVER_HOST`: MinIO(R) server host.
-- `MINIO_SERVER_PORT_NUMBER`: MinIO(R) server port. Default: `9000`.
-- `MINIO_SERVER_SCHEME`: MinIO(R) server scheme. Default: `http`.
-- `MINIO_SERVER_ACCESS_KEY`: MinIO(R) server Access Key. Must be common on every node.
-- `MINIO_SERVER_SECRET_KEY`: MinIO(R) server Secret Key. Must be common on every node.
+- `MC_HOST_<alias>`: `https://<Access Key>:<Secret Key>@<YOUR-S3-ENDPOINT>`
+  where:
+  - `<alias>`: MinIO client alias
+  - `<Access Key>`: MinIO(R) server Access Key. Must be common on every node.
+  - `<Secret Key>`: MinIO(R) server Secret Key. Must be common on every node.
+  - `<YOUR-S3-ENDPOINT>`: MinIO(R) server host and (optionally) port number.
 
 For instance, use the command below to create a new bucket in the MinIO(R) Server `my.minio.domain`:
 
 ```console
 $ docker run --rm --name minio-client \
-    --env MINIO_SERVER_HOST="my.minio.domain" \
-    --env MINIO_SERVER_ACCESS_KEY="minio-access-key" \
-    --env MINIO_SERVER_SECRET_KEY="minio-secret-key" \
+    --env MC_HOST_myminio="https://minio-access-key:minio-secret-key@my.minio.domain" \
     bitnami/minio-client \
-    mb minio/my-bucket
+    mb myminio/my-bucket
 ```
 
 Find more information about the client configuration in the [MinIO(R) Client documentation](https://docs.min.io/docs/minio-admin-complete-guide.html).
