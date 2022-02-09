@@ -99,7 +99,7 @@ $ docker run -d --name minio-server \
 Finally we create a new container instance to launch the MinIO(R) client and connect to the server created in the previous step. In this example, we create a new bucket in the MinIO(R) storage server:
 
 ```console
-$ docker run --rm -it --name minio-client \
+$ docker run --rm --name minio-client \
     --env MC_HOST_myminio="http://minio-access-key:minio-secret-key@minio-server:9000" \
     --network app-tier \
     bitnami/minio-client \
